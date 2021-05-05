@@ -3,6 +3,11 @@
 *.out
 *.pdf
 *.gz
+*.url
 
 reference/*
 presentations/*
+hands-on/Decentralized-Voting/*
+hands-on/prova/*
+hands-on/truffle-voting-dapp/*
+hands-on/metamask.txt
