@@ -14,4 +14,4 @@ Blockchain is one of the most disruptive technologies nowadays. It is a distribu
 
 [Report](paper/master.pdf)
 
-[Code](hands-on/ethereum-referendum/)
+[Code](hands-on/referendum/)
