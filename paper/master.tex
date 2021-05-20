@@ -1,3 +1,5 @@
+% !TeX document-id = {fd3a097d-8ca3-4154-98bc-98947b5e5311}
+% !TeX TXS-program:compile = txs:///pdflatex/[--shell-escape]
 % !TEX root = master.tex
 % !TeX encoding = UTF-8
 % !TeX spellcheck = en_GB
@@ -15,11 +17,29 @@
 \usepackage{float}
 \usepackage{multicol}
 \usepackage{titlesec}
+%\usepackage[algo2e]{algorithm2e}
+%\usepackage{algorithm}
+%\usepackage{minted}
+\usepackage{caption}
 \usepackage[hidelinks]{hyperref}
 \usepackage[a4paper, textwidth=470pt, textheight=750pt]{geometry}
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue,     
+	urlcolor=black,
+	citecolor=blue,
+	pdftitle={Evaluation of a blockchain platform: Ethereum}
+}
+\captionsetup{
+	justification=raggedright,
+	singlelinecheck=false
+}
+\graphicspath{ {./img/} }
 \setlength{\columnsep}{0.6cm}
+\addtolength{\skip\footins}{2pc plus 5pt} % footnote separation
 \titlespacing\section{0pt}{22pt plus 4pt minus 2pt}{7pt plus 2pt minus 2pt}
 \setlength\parindent{0pt} %noindent
+\input{solidity-highlighting.tex}
 
 \begin{document}
 
@@ -30,6 +50,7 @@
 \date{\normalsize May 2021}
 \author{
 	{\scshape Marcel Cases i Freixenet} \\
+	{\normalsize FIB-MIRI-DS} \\
 	{\normalsize Universitat Politècnica de Catalunya} \\
 	{\normalsize\href{mailto:marcel.cases@estudiantat.upc.edu}{marcel.cases@estudiantat.upc.edu}}
 }
@@ -42,29 +63,29 @@
 
 %The story is about Zachary McCoy, a neighbor of Gainesville, Florida\cite{ref:soler}, Police Department\footnote{ACAB.} and Google
 
-Blockchain is one of the most disruptive technologies nowadays. It is a distributed and secured network that allows deploying pieces of code known as smart contracts over it, and execute them when certain conditions are met. Ethereum is one of the blockchain platforms that supports smart contracts. When users want to send information, a transaction is made. A transaction can contain currency or code, and is verified by miners. Miners are users that verify that transactions are valid by solving equations. All this architecture allows the creation of decentralised applications, or DApps, which are services that run on the blockchain. These applications have many and diverse goals, like allowing users to vote, keeping safe digital identities, sharing medical records by protecting anonymity, or powering a crowdfunding campaign. A language for programming and running smart contracts is Solidity, and a tool for deploying it locally without real costs is Truffle.
+Blockchain is one of the most disruptive technologies nowadays. It is a distributed and secured network that allows deploying pieces of code known as smart contracts over it, and execute them when certain conditions are met. Ethereum is one of the main blockchain platforms that supports smart contracts. When users want to send information, a transaction is made and registered to the chain. A transaction can contain currency or code, and is verified by miners. Miners are users that verify that transactions are valid by solving computationally-consuming problems. All this architecture allows the creation of decentralized applications, or DApps, which are services that run on the blockchain. These applications have many and diverse goals, like allowing users to vote, keeping digital identities safe, sharing medical records by protecting anonymity, or powering a crowdfunding campaign. An experiment is made by developing and deploying a smart contract that emulates voting on a referendum.
 
 \section{Introduction}
 
 When people communicate directly to each other by speaking or by calling, or when they send messages one another, they trust each other. When it comes to money transactions over the internet, this trust is not automatic and there has to be a third party (a bank) which can verify that the transaction is performed.\\
 
-Blockchain technology is defying the classical way of authenticating parties and is dropping the role ob centralized banks away from their former functions. Blockchain uses cryptography and maths to verify transactions in a very secure wa and with a very low chances of being manipulated after a transaction has been validated, or in other words, it has been appended to the large-scale chain of blocks.\\
+Blockchain technology is defying the classical way of authenticating parties and is dropping the role of centralized banks away from their former functions. Blockchain uses cryptography and maths to verify transactions in a very secure way and with very low chances of being manipulated after a transaction has been validated, or in other words, it has been appended to the large-scale chain of blocks.\\
 
 Blockchain is distributed among all users, who keep part of the chain locally, and verifiers (also known as miners) constantly check and make sure that transactions and its hashes are respected, and getting rewarded for it. This is why a single user is not capable of modifying the chain, as it will be detected easily.\\
 
 Blockchain applications go beyond transactions an money management. Property registers, secure sharing of medical data, electronic voting, music royalties tracking, real-time IoT data gathering, personal identity security, anti-money laundering tracking system, crowdfunding, or supply chain and logistics monitoring are some of the applications that can be built on top of a blockchain.\\
 
-This report is focused on Ethereum, a blockchain technology that was introduced by Vitalik Buterin in 2013 as a new platform designed easier for any type of decentralized applications that any developer can use. He designed Ethereum as a blockchain that goes beyond the strict financial use Bitcoin used to have at that moment. Some applications which are working as real cases are analysed, and a custom application is developed and deployed locally using Truffle.
+This report is focused on Ethereum, a blockchain technology that was introduced by Vitalik Buterin in 2013 as a new platform designed easier for any type of decentralized applications that any developer can use. He designed Ethereum as a blockchain that goes beyond the strict financial use Bitcoin used to have at that moment. Some of the real-case applications that use blockchain are analysed in detail. Furthermore, a custom smart contract that simulates a referendum election, with three possible options to vote ---\textit{yes}, \textit{no}, or \textit{against all}---, is developed and deployed locally using a testnet for developing purposes. From the results obtained from this experiment, and based on other references from researchers, the concept of decentralized voting is discussed by analysing its potential and limitations.
 
 \section{Technical aspects}
 
 \subsection{Blockchain}
 
-Blockchain is the name for a peer-to-peer, decentralised and distributed database where stored data can not be modified once it has been validatd. It is a public ledger that allows transactions among end users (computers or devices). It is made of blocks that are linked to one another in a secured and encrypted way. Each block of the chain contains multiple information, like a timestamp of the creation time and a hash of the previous block. This architecture does not allow a new block to modify previous information, so what is written in the chain remains forever.\\
+Blockchain is the name for a peer-to-peer, decentralised and distributed database where stored data can not be modified once it has been validated. It is a public ledger that allows transactions among end users (computers or devices). It is made of blocks that are linked to one another in a secured and encrypted way. Each block of the chain contains multiple information, like a timestamp of the creation time and a hash of the previous block. This architecture does not allow a new block to modify previous information, so what is written in the chain remains forever.\\
 
 Its main characteristics are decentralization (no need to trust a third party), encryption (to ensure security, privacy and integrity), immutability (to prevent altering information), and distribution of the nodes that verify transactions.\\
 
-Each node has a copy of the ledger, so there is no need of a central manager (server). Nodes have the function to validate transactions and create new blocks.\\
+Each node has a copy of the ledger, so there is no need of a central manager (server). Nodes have the function of validating transactions and creating new blocks.\\
 
 A blockchain can be either:
 
@@ -91,7 +112,7 @@ Ethereum is the biggest decentralized application existing nowadays. It allows d
 
 Transactions are the way users interact with each other on the Ethereum network. A transaction is made when we want to add or update a state that is stored on the blockchain.\\
 
-The flow is: when a new transaction is entered, it is transmitted to a network of peer-to-peer computers distributed across the world. These computer solve equations to confirm the validity of the transaction. Once confirmed, it is clustered into a new block of the blockchain. After this, a transaction is completed.\\
+The flow is: when a new transaction is created, it is transmitted to a network of peer-to-peer devices distributed around the world. These devices solve equations to confirm the validity of each transaction. Once validated, the transaction is clustered into a new block of the blockchain. After this, a transaction is completed.\\
 
 The fields a transaction uses are the following:
 
@@ -140,7 +161,7 @@ To prevent the EVM to run smart contracts that could have infinite loops or malf
 
 Blockchain mining is the process that miners run to verify transactions of other users in the blockchain. It implies filling new hashes of blocks that are waiting to join the chain and verifying that they are genuine. Mining is usually rewarded in the form of digital currency.\\
 
-It goes through these steps:
+According to the Ethereum Whitepaper\cite{ref:buterin}, mining Ethereum goes through these steps:
 
 \begin{enumerate}
 	\item A user writes and signs a transaction request by using a private key linked to an account
@@ -184,6 +205,36 @@ All blockchains have many similarities, but there are some things that make the 
 
 In this section, some of the most powerful applications of blockchain, and more specifically Ethereum, are analysed. They all are real-case applications, all referenced, and they are analysed by their goal, potential, issues and limitations.
 
+\subsection{E-voting}
+
+Voting through the internet is something that can be done both with a central server or through a decentralized system like a blockchain. The main challenge is to keep votes anonymous, as well as ensuring only people in the census can vote once.\\
+
+Election processes are always key to be robust and transparent. The requirements they must fulfill are:
+
+\begin{itemize}
+	\item \textbf{Evidence-based elections} They have to create an evidence trail that can be checked to confirm that each relevant part of the system is functioning correctly as intended
+	\item \textbf{Auditability} The evidence trail is actually checked
+	\item \textbf{Secrecy} Necessary in order to serve compelling interests in preventing voter intimidation and election fraud
+	\item \textbf{Software independence} An undetected change or error in a system’s software cannot cause an undetectable change in the election outcome
+	\item \textbf{Voter-verifiable ballots} A voter composing a ballot must be able to verify for herself that her prepared ballot reflects her intended choices
+	\item \textbf{Contestability} Provides publicly verifiable evidence that the election outcome is untrustworthy, whenever an error is detected
+\end{itemize}
+
+Some countries like Estonia have been using encryption to secure the voting and blockchain to enable data integrity for non-repudiation, along with digital signatures to enable only authorized voters to vote.\\
+
+However, e-voting and more specifically decentralized, blockchain-based voting is sometimes rejected by researchers\footnote{\url{https://www.coindesk.com/mit-paper-rejects-blockchain-based-voting-systems-elections}}. The authors claim that the physical nature of mail-in ballots make them much less susceptible to large-scale attacks compared to online voting, where exploiting a single vulnerability could impact every ballot at once. One issue with online voting is that it opens itself up to attacks that are both scalable and undetectable. Even though current election systems are far from perfect, blockchain-based ones would greatly increase the risk of undetectable, nation-scale election failures.\\
+
+A company that has been investigating with electronic voting and is offering solutions to governments and administrations is Securevoting\footnote{\url{https://secure.vote}}. They offer user-friendly smartphone app and web platforms. It is an interface into their innovative blockchain agnostic scalability layer (BASL) governance system.\\
+
+Securevoting technology relies on four concepts:
+
+\begin{itemize}
+	\item \textbf{Security} SecureVote’s Copperfield algorithm provides a peer-to-peer, trustless secret ballot. Copperfield is immune to man in the middle attacks, and immediately identifies the presence of vote manipulation or attempts to expose voters.
+	\item \textbf{Scalability} One of the most significant challenges in the blockchain industry today. Thanks to our Blockchain Agnostic Scalability Layer (BASL), SecureVote is able to handle millions of votes a minute.
+	\item \textbf{Transparency} This blockchain technology allows full transparency with an open, auditable codebase. Every vote within the system is verifiable by any stakeholder.
+	\item \textbf{Decentralization} Unlike traditional centralised voting systems, a decentralised blockchain based system means there is no single point of weakness and has an extremely low risk of being compromised.
+\end{itemize}
+
 \subsection{Cryptocurrency (Ether)}
 
 Ether\footnote{\url{https://ethereum.org/en/eth}} (ETH) is the native cryptocurrency of the Ethereum platform. It is the second-largest cryptocurrency by market capitalization, after Bitcoin.\\
@@ -223,25 +274,6 @@ Blockchain enables more secure management and storage of digital identities by p
 IdentiCAT\footnote{\url{https://politiquesdigitals.gencat.cat/ca/tic/identicat}} is the alternative of physical ID cards managed by the Government of Catalonia. It is a decentralized and self-sovereign digital identity model, which aims to become the first public digital identity at a European level, and will be self-managed by the citizen with the legal guarantee and validity to operate with the public administration and the private sector. The Government only acts as a validator, giving the tools and a secure legal framework, but it will not in any case have the custody of the data.\\
 
 This new model of digital identity is based on DLT (Distributed Ledger Technology), upon which blockchain solutions are implemented. A Self Sovereign Identity (SSI) allows, in the digital world, to access with absolute security and privacy, online services, both public and private, and anonymously. With a specific software (in our phones or any determined computing device), the citizen will be able to create and manage his or her own identity, with absolute legal validity and privacy.
-
-\subsection{E-voting}
-
-Voting on the internet is something that can be done both with a central server or through a decentralised system like a blockchain. The main challenge is to keep votes anonymous, as well as ensuring only people in the census can vote once.\\
-
-Some contries like Estonia have been using encryption to secure the voting and blockchain to enable data integrity for non-repudiation, along with digital signatures to enable only authorized voters to vote.\\
-
-However, e-voting is sometimes rejected by researchers\footnote{\url{https://www.coindesk.com/mit-paper-rejects-blockchain-based-voting-systems-elections}}. The authors claim that the physical nature of mail-in ballots make them much less susceptible to large-scale attacks compared to online voting, where exploiting a single vulnerability could impact every ballot at once. One issue with online voting is that it opens itself up to attacks that are both scalable and undetectable. Even though current election systems are far from perfect, blockchain-based ones would greatly increase the risk of undetectable, nation-scale election failures.\\
-
-A company that has been investigating with electronic voting and is offering solutions to governments and administrations is Securevoting\footnote{\url{https://secure.vote}}. They offer user-friendly smartphone app and web platforms. It is an interface into their innovative blockchain agnostic scalability layer (BASL) governance system.\\
-
-Securevoting technology relies on four concepts:
-
-\begin{itemize}
-	\item \textbf{Security} SecureVote’s Copperfield algorithm provides a peer-to-peer, trustless secret ballot. Copperfield is immune to man in the middle attacks, and immediately identifies the presence of vote manipulation or attempts to expose voters.
-	\item \textbf{Scalability} One of the most significant challenges in the blockchain industry today. Thanks to our Blockchain Agnostic Scalability Layer (BASL), SecureVote is able to handle millions of votes a minute.
-	\item \textbf{Transparency} This blockchain technology allows full transparency with an open, auditable codebase. Every vote within the system is verifiable by any stakeholder.
-	\item \textbf{Decentralization} Unlike traditional centralised voting systems, a decentralised blockchain based system means there is no single point of weakness and has an extremely low risk of being compromised.
-\end{itemize}
 
 \subsection{Supercomputing}
 
@@ -298,9 +330,211 @@ There are some platforms like \textit{Kickstarter} that rely on crowdfunding to 
 
 Every party must trust the platform, but with smart contracts, a similar system that does not require a trusted third party can be created. A smart contract will maintain all the funds received until a certain objective is reached. Once that contract is deployed, project supporters can now transfer their money to the smart contract. If the project ends up reaching the objective, everything collected will automatically be passed on to the creators of the project, if not, it will be returned.
 
-\section{A hands-on exploration}
+\section{Hands-on exploration}
+
+\begin{center}
+\uppercase{A decentralised voting DApp}
+\end{center}
+
+\subsection{Goal}
+
+The goal of this hands-on exploration is to design, implement and deploy a minimal and secure referendum voting system using the properties of the blockchain technology. The final result is a decentralized app that runs on Ethereum. Authorized voters can anonymously answer \textit{yes}, \textit{no}, or \textit{against all} to a particular question and have access to the result. The vote is signed by the voter's account, and users can vote only once.
+
+\subsection{Architecture}
+
+The smart contract of the referendum for the decentralised voting application has been developed using Solidity and deployed on a local testnet Ethereum network.\\
+
+The testnet environment provides random addresses, each one with 100 Eth at the beginning. Each address represents a different voter, and this address is the voter ID that will be stored to the blockchain in order to prevent multiple times voting.\\
+
+The smart contract is contained on a single file (\textit{Referendum.sol}), which invokes \textit{Solidity v0.5.16}, a compiler with a great support among versions.\\
+
+\begin{lstlisting}[language=Solidity]
+pragma solidity ^0.5.16;
+contract Referendum {
+	...
+}
+\end{lstlisting}
+
+The main data structure to handle all the votes is made of the variables of type \textit{uint256} below:
+
+\begin{lstlisting}[language=Solidity]
+struct Result {
+	uint256 yes;
+	uint256 no;
+	uint256 againstAll;
+	uint256 totalVotes;
+}
+\end{lstlisting}
+
+These variables store the number of votes for each option, as well as the total amount of votes emitted.\\
+
+A constructor has been implemented to the code. It is the default state of the variables just after the smart contract has been deployed, and it sets the four values to 0.\\
+
+\begin{lstlisting}[language=Solidity]
+constructor(string memory _subject) public {
+	subject = _subject;
+	owner = msg.sender;
+	result = Result(0, 0, 0, 0);
+}
+\end{lstlisting}
+
+After the setup and definition of variables, the function \textit{Vote} is defined. It is in charge of creating a vote or denying every time a user attempts to vote. It first checks if the voter has already voted, and in this case it denies the permission to vote again (returns \textit{false}). In case it is the first time a user is voting, then it checks the parameter \textit{answer} and adds one unit to whatever option the user has chosen. It increments the \textit{totalVotes} variable by one as well. Finally it returns \textit{true} when the voter has voted and link this value to the voter's Ethereum unique address.\\
+
+\begin{lstlisting}[language=Solidity]
+function vote(uint8 answer) private returns (bool) {
+	address voter = msg.sender;
+	if(votes[voter].hasVoted) {
+		return false;
+	}
+	else {
+		if(answer == 0) {
+			result.yes++;
+		}
+		else if(answer == 1) {
+			result.no++;
+		}
+		else {
+			result.againstAll++;
+		}
+		result.totalVotes++;
+		votes[voter].answer = answer;
+		votes[voter].hasVoted = true;
+		emit HasVoted(voter);
+		return true;
+	}
+}
+\end{lstlisting}
+
+%\begin{algorithm}[H]
+%	\SetAlgoLined
+%	\If{voter.hasVoted}{
+%		\Return{false}
+%	}
+%	\Else{
+%		\If{answer is 'yes'}{
+%			result.yes $\gets$ result.yes + 1\\
+%		}
+%		\ElseIf{answer is 'no'}{
+%			result.no $\gets$ result.no + 1\\
+%		}
+%		\Else{
+%			result.againstAll $\gets$ result.againstAll + 1\\
+%		}
+%		result.totalVotes $\gets$ result.totalVotes + 1\\
+%		votes[voter].hasVoted $\gets$ true;\\
+%		emit HasVoted(voter);\\
+%		\Return{true}
+%	}
+%	\caption{Vote function}
+%	\label{alg1}
+%\end{algorithm}
+
+The functions that allow the action of voting one of the options are defined as follows:
+
+\begin{lstlisting}[language=Solidity]
+function voteYes() public returns(bool) {
+	return vote(0);
+}
+
+function voteNo() public returns(bool) {
+	return vote(1);
+}
+
+function voteAgainstAll() public returns(bool) {
+	return vote(2);
+}
+\end{lstlisting}
+
+Finally, the function that reads the results from the blockchain is:
+
+\begin{lstlisting}[language=Solidity]
+function getResult() public view returns(uint256, uint256, uint256, uint256) {
+	return (result.yes, result.no, result.againstAll, result.totalVotes);
+}
+\end{lstlisting}
+
+The testnet generates random addresses (Figure \ref{addresses}). Each one corresponds to a unique voter. These addresses have a default amount of Ether, which is used for emitting a vote. Notice that if a user that has already voted tries to vote again, his vote will be denied on this second intent, but the chain will create a new block with the failed attempt, which also consumes Ether.\\
+
+\makebox[0pt][l]{%
+	\begin{minipage}{\textwidth}
+		\includegraphics[width=.4\textwidth]{addresses}
+		\captionof{figure}{\textit{List of addresses generated\\
+			for the testnet with their value in Eth}}
+		\label{addresses}
+	\end{minipage}
+}\\\\
+
+For debugging purposes, the Remix\footnote{\url{https://remix-ide.readthedocs.io/en/latest}} environment, which is supported by the official Ethereum organization, offers graphical testing options on its web IDE. Figure \ref{interaction} shows this available options, where:
+
+\begin{itemize}
+	\item \underline{Orange buttons} \textit{voteAgainstAll}, \textit{voteNo}, and \textit{voteYes} are the three options available to vote for the referendum
+	\item \underline{Blue button} \textit{getResult} reads the results from the blockchain and shows them encoded the following way:
+	\begin{itemize}
+		\item 0 is for the option \textit{yes}
+		\item 1 is for the option \textit{no}
+		\item 2 is for the option \textit{againstAll}
+		\item 3 is the total amount of votes \textit{totalVotes}
+	\end{itemize}
+\end{itemize}
+
+Reading variables from a contract deployed on the Ethereum blockchain does not consume any Ether, and can be done "for free" as many times as needed.\\
+
+\makebox[0pt][l]{%
+	\begin{minipage}{\textwidth}
+		\includegraphics[width=.4\textwidth]{interaction}
+		\captionof{figure}{\textit{Interactive menu for debugging\\
+		the behavior of the smart contract}}
+		\label{interaction}
+	\end{minipage}
+}\\\\
+
+\subsection{Potential}
+
+One of the good sides of any kind of online voting would be the reduction of costs it would suppose for the organizers (the administration, e.g.). Elections usually have a huge economic cost, as well as a complex logistics, and there would be no need to organize such an event.\\
+
+In a situation of pandemic, voting online would reduce social interaction to virtually zero. There is no need to attend any physical place. In case of assistance during the election, all could be done remotely.\\
+
+Voting from a computer or smartphone may seem convenient and more accessible for electors. It could even incentivize younger voters to do so, and promote a digital culture of doing things.\\
+
+What's more, a blockchain-based voting system does not concern itself with the security of its Internet connection, because any hacker with access to a voter's terminal will not be able to affect other nodes, even if the identity and keys of this particular user are revealed.\\
+
+Voters can effectively submit their vote without revealing their identity or political preferences to the public. The blockchain is in charge of protecting all voter's identity.\\
+
+Such a technology would allow people to verify that their votes are recorded and counted correctly without compromising their anonymity. Moreover, anyone may be able to check the counting without breaking secrecy.
+
+\subsection{Limitations and improvements}
+\label{sec:limitations}
+
+Distributed voting over a blockchain network sounds promising and would get us rid of many issues voting nowadays have. Nonetheless, there are claims made by  researchers\cite{ref:park} who say that blockchain-based voting could threaten democracy. Some security experts warn any internet-based election system is wide open to attack, regardless of the underlying infrastructure ---\textit{while current election systems are far from perfect, Internet and blockchain-based voting would greatly increase the risk of undetectable, nation-scale election failures}---.\\
+
+In a centralised e-voting system, votes are stored in a database, but in a blockchain-based voting one, votes are variables stored over the network. A potential issue would be the case that the original smart contract had to be modified or updated for some reason. This would require to re-compile and deploy again, and this would suppose the loss of all the chain (and its stored votes) so far. There would be no way to recover the original votes like in a database, and could have catastrophic results for the election in course.\\
+
+A similar issue would be the case in which the contract was not properly described and contains a point of failure. If this breaks in the middle of the voting process, the entire election would be compromised.\\
+
+A way to prevent an issue like this would be to mimic a physical voting, where there are different ballots and one ballot being compromised does not mean the entire election compromised. A way to achieve this is by distributing the whole decentralized voting. This would be an implementation that consists of a master ballot contract that spawns multiple children, each containing the same proposal, but registers up to a total number of people living in a certain area. Registered voters receive their unique child ballot contract to vote with. This assignment can be done in many ways (based on geography, time registered, or just at random). When the voting ends, each child ballot contract will track its own votes itself and will report the result to the master ballot contract. The master ballot contract then consolidates and reports the final result.\\
+
+In a permissioned blockchais like the referendum case there are often less severs when compared to larger pubic blockchains. Fewer servers increase the possibility of all of them becoming compromised.\\
+
+Voters would have to be informed of what a blockchain-based election implies, given that if a voter loses their private key, they won’t be able to vote. If a malicious actor gains access to that key, they can vote for the user without anyone knowing.\\
+
+Another downside of large-scale blockchains is the transaction time. Although Ethereum has faster transactions when compared to other platforms (such as Bitcoin), the transaction time would be too high in an election where there are more than 10M people expected to vote, which makes it not a good option.\\
+
+Voting from a device such as a computer or smartphone may seem useful and a step forward in accessibility. However, studies have shown\cite{ref:park} that online voting may have little to no effect on turnout in practice, and it may even dis-encourage voting (Switzerland and Belgium). Studies from elections held in Estonia have also proved that turnout increase thanks to online voting may favor higher-income and higher-education demographics and can dis-encourage lower income citizens. Moscow also tried a blockchain-based voting system in September 2019. The government made the source code open and encouraged researchers to audit it. However, the system was shown to be gravely vulnerable and infeasible for large-scale elections.
+
 
 \section{Conclusion and future work}
+
+Blockchain is a disruptive technology that could easily promote the development of a larger ecosystem over time. Although implementing blockchain technology can bring many advantages to some sectors, it is the important to understand what it does well and what it doesn't do well.\\
+
+Ethereum is a blockchain platform that completely revolutionizes the way transactions among peers are made. Given the powerful capabilities of smart contracts, it is possible to replace all existing ledger-based, physical standard contracts to improve transaction security, reduce costs and decentralize the architecture, with less dependence on servers. The applications are many, and it looks like just the beginning. In terms of use and development, Ethereum is evolving and becoming more mature with faster and a higher number of transactions compared to Bitcoin. One can believe that Ethereum will continue to grow and will remain one of the biggest players on the market for years.\\
+
+For some companies and sectors, such as financial services and the supply chain industry, blockchain-based solutions will likely be implemented sooner than in many other industries. Blockchain has many promising applications in cryptocurrencies, where transactions among users are anonymous, although they are exposed to a high volatility in value and lack of regulation can be a problem. For digital identity, blockchain provides strong security and privacy when using it with online services, although there must be a central authority who issues the certificates at least once at the creation of the identity. For supercomputing applications, blockchain can be useful to divide computing requirements among peers, although the programming difficulty can be higher and the rewarding system a little tricky, so blockchain has to be thoroughly discussed before starting a project in supercomputing. The medical sector is one of the most benefited from blockchain as it has many uses: managing medical records, protecting and anonymizing healthcare data, or track drugs supply in pharmacies, e.g. Related to supply, blockchain has also a great application in supply chain, by increasing traceability, reduce costs and improve visibility and compliance with customers. And for crowdfunding, even though most platforms work on a centralized-basis, decentralization can be a good case study for studying how smart contracts work.\\
+
+E-voting faces many challenges that has to enforce in order to be homologable to in-person voting, such as auditability, secrecy, or contestability. Blockchain can assure many of them, although it is not recommended to do after research results suggest. There are some flaws and vulnerabilities that can be dangerous for the election, and the proof it that no country in the world is using blockchain-based voting in their election system (beyond sporadic tests). Decentralized voting using blockchain is definitely not mature enough to be applicable to large-scale elections that imply a thorough scrutiny, although for smaller scale elections (company internal referendum, e.g.) could be feasible and an option to take into account. An alternative to blockchain would be to use centralized e-voting systems, which offer almost all advantages of blockchain (like voting from home using any device, or reduction of costs of setting physical ballots), without the flaws blockchain voting has.\\
+
+Electric, online, and blockchain-based voting systems are more vulnerable to serious failures than available paper-ballot-based alternatives.Adding new technologies to systems may create new potential for attacks. This is why it is not difficult to conclude that blockchain does not solve the fundamental security problems suffered by all electronic voting systems, and should be analyzed very deeply for such an application.\\
+
+Some future work that follows the decentralized voting application studied, developed and deployed in this project would be to design the user interface that would simulate what a voter ---citizen--- would use, as well as to implement the authentication methods that are critical for ensuring that the correct user is voting on his behalf. This is something that could be achieved by using \textit{Web3}, a Javascript library that allows interacting with the smart contract, and an HTML web interface. Another improvement would be to design the distributed-decentralized voting ballots, as explained in section \ref{sec:limitations}. This would add complexity to the smart contract, but would make the polling more robust and less vulnerable to failure. It is fully feasible to do and Ethereum supports all these features.
 
 \begin{thebibliography}{100}
 
@@ -343,6 +577,10 @@ Wiley, 2019.
 Chun Chung Wu. 
 \textit{Ethereum 101: Blockchain as Distributed Computation Platform}.
 {\small \\\url{https://code.oursky.com/ethereum-blockchain-computation-platform}}
+
+\bibitem{ref:park} 
+Sunoo Park, Michael Specter, Neha Narula, Ronald L Rivest. 
+\textit{Going from bad to worse: from Internet voting to blockchain voting}.
 
 \bibitem{ref:buterin} 
 Vitalik Buterin. 

@@ -1,0 +1,7 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n+nx}{constructor}\PYG{p}{(}\PYG{n+nx}{string} \PYG{n+nx}{memory} \PYG{n+nx}{\PYGZus{}subject}\PYG{p}{)} \PYG{k+kr}{public} \PYG{p}{\PYGZob{}}
+	\PYG{n+nx}{subject} \PYG{o}{=} \PYG{n+nx}{\PYGZus{}subject}\PYG{p}{;}
+	\PYG{n+nx}{owner} \PYG{o}{=} \PYG{n+nx}{msg}\PYG{p}{.}\PYG{n+nx}{sender}\PYG{p}{;}
+	\PYG{n+nx}{result} \PYG{o}{=} \PYG{n+nx}{Result}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{);}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}
