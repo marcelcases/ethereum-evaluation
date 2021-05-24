@@ -333,7 +333,8 @@ Every party must trust the platform, but with smart contracts, a similar system 
 \section{Hands-on exploration}
 
 \begin{center}
-\uppercase{A decentralised voting DApp}
+\underline{\uppercase{A decentralised e-voting}}\\
+\underline{\uppercase{referendum}}
 \end{center}
 
 \subsection{Goal}
@@ -348,7 +349,7 @@ The testnet environment provides random addresses, each one with 100 Eth at the 
 
 The smart contract is contained on a single file (\textit{Referendum.sol}), which invokes \textit{Solidity v0.5.16}, a compiler with a great support among versions.\\
 
-\begin{lstlisting}[language=Solidity]
+\begin{lstlisting}[language=Solidity, numbers=none]
 pragma solidity ^0.5.16;
 contract Referendum {
 	...
@@ -357,7 +358,7 @@ contract Referendum {
 
 The main data structure to handle all the votes is made of the variables of type \textit{uint256} below:
 
-\begin{lstlisting}[language=Solidity]
+\begin{lstlisting}[language=Solidity, numbers=none]
 struct Result {
 	uint256 yes;
 	uint256 no;
@@ -370,7 +371,7 @@ These variables store the number of votes for each option, as well as the total 
 
 A constructor has been implemented to the code. It is the default state of the variables just after the smart contract has been deployed, and it sets the four values to 0.\\
 
-\begin{lstlisting}[language=Solidity]
+\begin{lstlisting}[language=Solidity, numbers=none]
 constructor(string memory _subject) public {
 	subject = _subject;
 	owner = msg.sender;
@@ -380,7 +381,7 @@ constructor(string memory _subject) public {
 
 After the setup and definition of variables, the function \textit{Vote} is defined. It is in charge of creating a vote or denying every time a user attempts to vote. It first checks if the voter has already voted, and in this case it denies the permission to vote again (returns \textit{false}). In case it is the first time a user is voting, then it checks the parameter \textit{answer} and adds one unit to whatever option the user has chosen. It increments the \textit{totalVotes} variable by one as well. Finally it returns \textit{true} when the voter has voted and link this value to the voter's Ethereum unique address.\\
 
-\begin{lstlisting}[language=Solidity]
+\begin{lstlisting}[language=Solidity, numbers=none]
 function vote(uint8 answer) private returns (bool) {
 	address voter = msg.sender;
 	if(votes[voter].hasVoted) {
@@ -431,7 +432,7 @@ function vote(uint8 answer) private returns (bool) {
 
 The functions that allow the action of voting one of the options are defined as follows:
 
-\begin{lstlisting}[language=Solidity]
+\begin{lstlisting}[language=Solidity, numbers=none]
 function voteYes() public returns(bool) {
 	return vote(0);
 }
@@ -447,7 +448,7 @@ function voteAgainstAll() public returns(bool) {
 
 Finally, the function that reads the results from the blockchain is:
 
-\begin{lstlisting}[language=Solidity]
+\begin{lstlisting}[language=Solidity, numbers=none]
 function getResult() public view returns(uint256, uint256, uint256, uint256) {
 	return (result.yes, result.no, result.againstAll, result.totalVotes);
 }
@@ -532,7 +533,7 @@ For some companies and sectors, such as financial services and the supply chain 
 
 E-voting faces many challenges that has to enforce in order to be homologable to in-person voting, such as auditability, secrecy, or contestability. Blockchain can assure many of them, although it is not recommended to do after research results suggest. There are some flaws and vulnerabilities that can be dangerous for the election, and the proof it that no country in the world is using blockchain-based voting in their election system (beyond sporadic tests). Decentralized voting using blockchain is definitely not mature enough to be applicable to large-scale elections that imply a thorough scrutiny, although for smaller scale elections (company internal referendum, e.g.) could be feasible and an option to take into account. An alternative to blockchain would be to use centralized e-voting systems, which offer almost all advantages of blockchain (like voting from home using any device, or reduction of costs of setting physical ballots), without the flaws blockchain voting has.\\
 
-Electric, online, and blockchain-based voting systems are more vulnerable to serious failures than available paper-ballot-based alternatives.Adding new technologies to systems may create new potential for attacks. This is why it is not difficult to conclude that blockchain does not solve the fundamental security problems suffered by all electronic voting systems, and should be analyzed very deeply for such an application.\\
+Electronic, online, and blockchain-based voting systems are more vulnerable to serious failures than available paper-ballot-based alternatives. Adding new technologies to systems may create new potential for attacks. This is why it is not difficult to conclude that blockchain does not solve the fundamental security problems suffered by all electronic voting systems, and should be analyzed very deeply for such an application.\\
 
 Some future work that follows the decentralized voting application studied, developed and deployed in this project would be to design the user interface that would simulate what a voter ---citizen--- would use, as well as to implement the authentication methods that are critical for ensuring that the correct user is voting on his behalf. This is something that could be achieved by using \textit{Web3}, a Javascript library that allows interacting with the smart contract, and an HTML web interface. Another improvement would be to design the distributed-decentralized voting ballots, as explained in section \ref{sec:limitations}. This would add complexity to the smart contract, but would make the polling more robust and less vulnerable to failure. It is fully feasible to do and Ethereum supports all these features.
 
@@ -568,10 +569,10 @@ Julien Klepatch.
 \textit{Learn Ethereum DApps. Build a todo list with Solidity smart contract, Truffle, Javascript and Webpack}.
 2019.
 
-\bibitem{ref:solomon} 
-Michael G. Solomon. 
-\textit{Ethereum for dummies}.
-Wiley, 2019.
+%\bibitem{ref:solomon} 
+%Michael G. Solomon. 
+%\textit{Ethereum for dummies}.
+%Wiley, 2019.
 
 \bibitem{ref:wu} 
 Chun Chung Wu. 
@@ -581,6 +582,10 @@ Chun Chung Wu.
 \bibitem{ref:park} 
 Sunoo Park, Michael Specter, Neha Narula, Ronald L Rivest. 
 \textit{Going from bad to worse: from Internet voting to blockchain voting}.
+
+\bibitem{ref:isirova} 
+Kateryna Isirova, Anastasiia Kiian, Mariia Rodinko, Alexandr Kuznetsov. 
+\textit{Decentralized Electronic Voting System Based on Blockchain Technology Developing Principals}.
 
 \bibitem{ref:buterin} 
 Vitalik Buterin. 
