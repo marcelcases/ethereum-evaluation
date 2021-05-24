@@ -38,7 +38,7 @@ contract Referendum {
             else if(answer == 1) {
                 result.no++;
             }
-            else {
+            else if(answer == 2) {
                 result.againstAll++;
             }
             result.totalVotes++;
@@ -65,9 +65,4 @@ contract Referendum {
         return (result.yes, result.no, result.againstAll, result.totalVotes);
     }
 
-    /*function kill() public {
-        if(owner == msg.sender) {
-            selfdestruct(owner);
-        }
-    }*/
 }
