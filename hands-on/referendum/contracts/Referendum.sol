@@ -20,8 +20,6 @@ contract Referendum {
         result = Result(0, 0, 0, 0);
     }
 
-    event HasVoted(address voter);
-
     function vote(uint8 answer) private returns(bool) {
         address voter = msg.sender;
         if(votes[voter].hasVoted) {
@@ -40,7 +38,6 @@ contract Referendum {
             result.totalVotes++;
             votes[voter].answer = answer;
             votes[voter].hasVoted = true;
-            emit HasVoted(voter);
             return true;
         }
     }
