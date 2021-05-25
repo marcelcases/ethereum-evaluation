@@ -15,18 +15,14 @@ contract Referendum {
 
     mapping (address => Vote) votes;
     Result result;
-    string public subject;
-    address payable owner;
 
-    constructor(string memory _subject) public {
-        subject = _subject;
-        owner = msg.sender;
+    constructor() public {
         result = Result(0, 0, 0, 0);
     }
 
     event HasVoted(address voter);
 
-    function vote(uint8 answer) private returns (bool) {
+    function vote(uint8 answer) private returns(bool) {
         address voter = msg.sender;
         if(votes[voter].hasVoted) {
             return false;
