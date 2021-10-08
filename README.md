@@ -1,10 +1,16 @@
 # Evaluation of a blockchain platform: Ethereum
 
+This project is an evaluation of Ethereum in general terms. It consists on a report describing blockchain and in particular Ethereum, as well as its most prominent applications. It also contains a hands-on demonstration of a functional voting decentralized application over Ethereum.
+
 ## About
 
-Decentralised Systems  
-Spring 2021  
-Marcel Cases i Freixenet  
+**Author**  
+Marcel Cases i Freixenet &lt;marcel.cases@estudiantat.upc.edu&gt;
+
+**Course**  
+Decentralised Systems (DS-MIRI)  
+FIB - Universitat Politècnica de Catalunya. BarcelonaTech  
+Spring 2021 
 
 ## Abstract
 
