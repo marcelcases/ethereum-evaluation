@@ -1,6 +1,6 @@
 # Evaluation of a blockchain platform: Ethereum
 
-This project is an evaluation of Ethereum in general terms. It consists on a report describing blockchain and in particular Ethereum, as well as its most prominent applications. It also contains a hands-on demonstration of a functional voting decentralized application over Ethereum.
+This project is an evaluation of Ethereum in general terms. It consists of a report describing blockchain and in particular Ethereum, as well as its most prominent applications. It also contains a hands-on demonstration of a functional voting decentralized application over Ethereum.
 
 ## About
 
